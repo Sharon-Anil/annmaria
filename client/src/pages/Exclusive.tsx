@@ -108,11 +108,21 @@ const Exclusive: React.FC = () => {
         initial="hidden"
         animate="visible"
       >
-        {exclusiveProducts.map(p => (
-          <ExclusiveCardWrapper key={p.id} variants={itemVariants}>
-            <ProductCard product={p} />
-          </ExclusiveCardWrapper>
-        ))}
+        {products.length === 0 ? (
+          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '4rem', color: 'rgba(255,255,255,0.5)' }}>
+            Loading signature collection...
+          </div>
+        ) : exclusiveProducts.length === 0 ? (
+          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '4rem', color: 'rgba(255,255,255,0.5)' }}>
+            Our exclusive collection is currently being curated. Please check back soon.
+          </div>
+        ) : (
+          exclusiveProducts.map(p => (
+            <ExclusiveCardWrapper key={p.id} variants={itemVariants}>
+              <ProductCard product={p} />
+            </ExclusiveCardWrapper>
+          ))
+        )}
       </Grid>
     </Container>
   );
