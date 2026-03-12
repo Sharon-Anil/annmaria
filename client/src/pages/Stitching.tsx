@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { Scissors, Ruler, CheckCircle, MessageCircle, Camera } from 'lucide-react';
+import { Scissors, CheckCircle, MessageCircle, Camera } from 'lucide-react';
 
 const Container = styled.div`
   padding: 4rem 5%;
