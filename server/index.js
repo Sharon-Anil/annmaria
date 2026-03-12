@@ -30,7 +30,7 @@ app.post('/api/payment/razorpay/order', async (req, res) => {
   const { amount } = req.body;
   try {
     const options = {
-      amount: amount * 100, // amount in paisa
+      amount: Math.round(amount * 100), // amount in paisa, must be integer
       currency: "INR",
       receipt: `receipt_${Date.now()}`,
     };

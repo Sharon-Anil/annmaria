@@ -304,22 +304,33 @@ const Checkout: React.FC = () => {
                 setIsOrdered(true);
                 navigate('/payment-success');
             }
-        } catch (error) {
-            console.error(error);
-            alert("Something went wrong");
+        } catch (error: any) {
+            console.error('Checkout Error:', error);
+            alert(`Checkout failed: ${error.message || "Something went wrong"}. Please check if your backend is running and Razorpay keys are configured.`);
             setLoading(false);
         }
     };
 
     const verifyPhonePe = async () => {
         setLoading(true);
-        // Simulate background verification
-        setTimeout(async () => {
-            await placeOrder({ ...formData, method: 'phonepay' });
-            setIsOrdered(true);
-            setShowPhonePeModal(false);
-            navigate('/payment-success');
-        }, 2000);
+        try {
+            // Simulate background verification
+            setTimeout(async () => {
+                try {
+                    await placeOrder({ ...formData, method: 'phonepay' });
+                    setIsOrdered(true);
+                    setShowPhonePeModal(false);
+                    navigate('/payment-success');
+                } catch (err: any) {
+                    console.error('PhonePe Sync Error:', err);
+                    alert("Order placement failed. Please check your connection.");
+                    setLoading(false);
+                }
+            }, 2000);
+        } catch (error) {
+            console.error('PhonePe Verification Error:', error);
+            setLoading(false);
+        }
     };
 
     if (cart.length === 0 && !isOrdered) {
