@@ -198,7 +198,7 @@ const Checkout: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [isOrdered, setIsOrdered] = useState(false);
     const [showPhonePeModal, setShowPhonePeModal] = useState(false);
-    const [paymentMethod, setPaymentMethod] = useState<'razorpay' | 'phonepay' | 'cod'>('razorpay');
+    const [paymentMethod, setPaymentMethod] = useState<'razorpay' | 'phonepay' | 'cod' | 'demo'>('demo');
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -300,6 +300,13 @@ const Checkout: React.FC = () => {
             } else if (paymentMethod === 'phonepay') {
                 setShowPhonePeModal(true);
                 setLoading(false);
+            } else if (paymentMethod === 'demo') {
+                // Instant demo success
+                setTimeout(async () => {
+                    await placeOrder({ ...formData, method: 'demo' });
+                    setIsOrdered(true);
+                    navigate('/payment-success');
+                }, 1000);
             } else {
                 await placeOrder({ ...formData, method: 'cod' });
                 setIsOrdered(true);
@@ -411,6 +418,15 @@ const Checkout: React.FC = () => {
                                 </div>
                             </OptionCard>
 
+                            <OptionCard selected={paymentMethod === 'demo'}>
+                                <input type="radio" name="payment" onChange={() => setPaymentMethod('demo')} checked={paymentMethod === 'demo'} />
+                                <Package size={20} />
+                                <div>
+                                    <strong>Demo Payment (Test Mode)</strong>
+                                    <p style={{ fontSize: '0.8rem', opacity: 0.7 }}>Instance success for presentation</p>
+                                </div>
+                            </OptionCard>
+
                             <OptionCard selected={paymentMethod === 'cod'}>
                                 <input type="radio" name="payment" onChange={() => setPaymentMethod('cod')} checked={paymentMethod === 'cod'} />
                                 <Heart size={20} />
@@ -447,7 +463,7 @@ const Checkout: React.FC = () => {
                         </SummaryRow>
 
                         <OrderButton type="submit" disabled={loading}>
-                            {loading ? 'Processing...' : paymentMethod === 'cod' ? 'Place COD Order' : 'Pay & Place Order'}
+                            {loading ? 'Processing...' : paymentMethod === 'cod' ? 'Place COD Order' : paymentMethod === 'demo' ? 'Complete Demo Order' : 'Pay & Place Order'}
                         </OrderButton>
 
                         <p style={{ textAlign: 'center', fontSize: '0.8rem', marginTop: '1rem', color: 'rgba(255,255,255,0.5)' }}>
