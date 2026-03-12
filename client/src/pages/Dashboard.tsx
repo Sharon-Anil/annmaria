@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 import { LayoutDashboard, PackageSearch, Users, ShoppingCart, Settings, LogOut, ExternalLink, Plus, Edit, Trash2, ArrowUpRight, TrendingUp } from 'lucide-react';
 
 const AdminWrapper = styled.div`
@@ -361,17 +362,17 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     if (!user || user.email !== 'annmaria') return;
 
-    fetch('http://localhost:5000/api/reports/dashboard')
+    fetch(`${API_BASE_URL}/api/reports/dashboard`)
       .then(res => res.json())
       .then(d => setData(d))
       .catch(console.error);
 
-    fetch('http://localhost:5000/api/orders')
+    fetch(`${API_BASE_URL}/api/orders`)
       .then(res => res.json())
       .then(o => setOrders(o))
       .catch(console.error);
 
-    fetch('http://localhost:5000/api/products')
+    fetch(`${API_BASE_URL}/api/products`)
       .then(res => res.json())
       .then(p => setProducts(p))
       .catch(console.error);
