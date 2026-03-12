@@ -301,17 +301,17 @@ const Checkout: React.FC = () => {
                 setShowPhonePeModal(true);
                 setLoading(false);
             } else if (paymentMethod === 'demo') {
-                // Instant demo success
-                setTimeout(async () => {
-                    await placeOrder({ ...formData, method: 'demo' });
-                    setIsOrdered(true);
-                    navigate('/payment-success');
-                }, 1000);
+                // Instant demo success with a small delay for realism
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                await placeOrder({ ...formData, method: 'demo' });
+                setIsOrdered(true);
+                navigate('/payment-success');
             } else {
                 await placeOrder({ ...formData, method: 'cod' });
                 setIsOrdered(true);
                 navigate('/payment-success');
             }
+            setLoading(false);
         } catch (error: any) {
             console.error('Checkout Error:', error);
             alert(`Checkout failed: ${error.message || "Something went wrong"}. Please check if your backend is running and Razorpay keys are configured.`);
