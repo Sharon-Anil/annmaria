@@ -244,7 +244,8 @@ const Checkout: React.FC = () => {
                 });
 
                 if (!orderResponse.ok) {
-                    throw new Error('Failed to create Razorpay order');
+                    const errorData = await orderResponse.json();
+                    throw new Error(errorData.details || 'Failed to create Razorpay order');
                 }
 
                 const orderData = await orderResponse.json();

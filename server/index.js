@@ -37,8 +37,12 @@ app.post('/api/payment/razorpay/order', async (req, res) => {
     const order = await razorpay.orders.create(options);
     res.json(order);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error creating Razorpay order" });
+    console.error("Razorpay Order Error:", error);
+    res.status(500).json({ 
+      success: false, 
+      message: "Error creating Razorpay order", 
+      details: error.description || error.message || "Unknown Razorpay error"
+    });
   }
 });
 
