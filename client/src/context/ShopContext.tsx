@@ -36,6 +36,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [orders, setOrders] = useState<any[]>([]);
 
   useEffect(() => {
+    console.log('Fetching products from:', `${API_BASE_URL}/api/products`);
     // Fetch products from our mock backend
     fetch(`${API_BASE_URL}/api/products`)
       .then(res => res.json())
