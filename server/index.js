@@ -106,6 +106,16 @@ app.get('/api/orders', (req, res) => {
   res.json(orders);
 });
 
+app.post('/api/orders', (req, res) => {
+  const newOrder = {
+    id: `ORD${Date.now()}`,
+    ...req.body,
+    date: new Date().toISOString()
+  };
+  orders.push(newOrder);
+  res.status(201).json(newOrder);
+});
+
 app.get('/api/reports/dashboard', (req, res) => {
   res.json(metrics);
 });

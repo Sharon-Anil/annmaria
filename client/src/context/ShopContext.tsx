@@ -77,27 +77,42 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const placeOrder = async (orderDetails: any) => {
-    const newOrder = {
-      id: `ORD${Date.now()}`,
-      items: [...cart],
-      total: cartTotal,
-      status: orderDetails.method === 'cod' ? 'Pending' : 'Paid',
-      date: new Date().toLocaleDateString(),
-      address: {
-        name: orderDetails.name,
-        phone: orderDetails.phone,
-        email: orderDetails.email,
-        fullAddress: orderDetails.address,
-        city: orderDetails.city,
-        pincode: orderDetails.pincode,
-        state: orderDetails.state
-      },
-      paymentMethod: orderDetails.method
-    };
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/orders`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: cart,
+          total: cartTotal,
+          status: orderDetails.method === 'cod' ? 'Pending' : 'Paid',
+          address: {
+            name: orderDetails.name,
+            phone: orderDetails.phone,
+            email: orderDetails.email,
+            fullAddress: orderDetails.address,
+            city: orderDetails.city,
+            pincode: orderDetails.pincode,
+            state: orderDetails.state
+          },
+          paymentMethod: orderDetails.method,
+          paymentId: orderDetails.paymentId
+        }),
+      });
 
-    setOrders(prev => [newOrder, ...prev]);
-    setCart([]);
-    console.log('Order placed successfully:', newOrder);
+      if (!response.ok) {
+        throw new Error('Failed to place order');
+      }
+
+      const newOrder = await response.json();
+      setOrders(prev => [newOrder, ...prev]);
+      setCart([]);
+      console.log('Order placed successfully:', newOrder);
+    } catch (error) {
+      console.error('Error placing order:', error);
+      throw error;
+    }
   };
 
   const cartTotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
